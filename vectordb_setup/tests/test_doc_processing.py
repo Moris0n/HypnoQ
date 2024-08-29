@@ -1,6 +1,7 @@
+#python -m unittest discover -s tests
 import unittest
 import os
-import dotenv
+
 from langchain.text_splitter import MarkdownHeaderTextSplitter
 from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
 from langchain.vectorstores import FAISS
@@ -11,9 +12,8 @@ class TestDocumentProcessing(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        dotenv.load_dotenv(encoding='utf-8')
-        cls.DATA_PATH = 'data'
-        cls.INDEX_NAME = 'hypnoq_index'
+        cls.DATA_PATH = os.getenv("DATA_PATH")
+        cls.INDEX_NAME = os.getenv("INDEX_NAME")
         cls.loader = DirectoryLoader(cls.DATA_PATH, glob="**/*.md", loader_cls=TextLoader)
         cls.documents = cls.loader.load()
         cls.headers_to_split_on = [
