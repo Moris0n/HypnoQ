@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "models"
+version = "0.1.0"
+description = ""
+authors = ["Moris0n <146327569+Moris0n@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.12,<3.13"
+langchain = "^0.2.15"
+langchain-community = "^0.2.14"
+faiss-cpu = "^1.8.0.post1"
+fastembed = "^0.3.6"
+
+
+[tool.poetry.group.dev.dependencies]
+tqdm = "^4.66.5"
+jupyterlab = "^4.2.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
