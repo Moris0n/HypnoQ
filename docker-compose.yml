@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  vector_db:
+    build:
+      context: ./vector_db
+      dockerfile: Dockerfile
+    volumes:
+      - ./vector_db/data:/app/data
+    ports:
+      - "5000:5000"
+
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+    depends_on:
+      - vector_db
+
+  models:
+    build:
+      context: ./models
+      dockerfile: Dockerfile
+    depends_on:
+      - vector_db
