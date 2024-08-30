@@ -11,6 +11,8 @@ langchain = "^0.2.15"
 langchain-community = "^0.2.14"
 faiss-cpu = "^1.8.0.post1"
 fastembed = "^0.3.6"
+groq = "^0.10.0"
+langchain-groq = "^0.1.9"
 
 
 [tool.poetry.group.dev.dependencies]

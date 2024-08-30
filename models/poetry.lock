@@ -658,6 +658,17 @@ files = [
 ]
 
 [[package]]
+name = "distro"
+version = "1.9.0"
+description = "Distro - an OS platform information API"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "distro-1.9.0-py3-none-any.whl", hash = "sha256:7bffd925d65168f85027d8da9af6bddab658135b840670a223589bc0c8ef02b2"},
+    {file = "distro-1.9.0.tar.gz", hash = "sha256:2fa77c6fd8940f116ee1d6b94a2f90b13b5ea8d019b98bc8bafdcabcdd9bdbed"},
+]
+
+[[package]]
 name = "executing"
 version = "2.0.1"
 description = "Get the currently executing AST node of a frame, and other information"
@@ -982,6 +993,25 @@ files = [
 [package.extras]
 docs = ["Sphinx", "furo"]
 test = ["objgraph", "psutil"]
+
+[[package]]
+name = "groq"
+version = "0.10.0"
+description = "The official Python library for the groq API"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "groq-0.10.0-py3-none-any.whl", hash = "sha256:6939e3c62b005e7aa9cabca6ea2eaf96cea595e2f7d4658df6c0c7c8ccf59410"},
+    {file = "groq-0.10.0.tar.gz", hash = "sha256:7653aad4c0b363928970fc55626a83624f5eab6503ee74fb25f255e24e05fcf8"},
+]
+
+[package.dependencies]
+anyio = ">=3.5.0,<5"
+distro = ">=1.7.0,<2"
+httpx = ">=0.23.0,<1"
+pydantic = ">=1.9.0,<3"
+sniffio = "*"
+typing-extensions = ">=4.7,<5"
 
 [[package]]
 name = "h11"
@@ -1570,6 +1600,21 @@ pydantic = [
 PyYAML = ">=5.3"
 tenacity = ">=8.1.0,<8.4.0 || >8.4.0,<9.0.0"
 typing-extensions = ">=4.7"
+
+[[package]]
+name = "langchain-groq"
+version = "0.1.9"
+description = "An integration package connecting Groq and LangChain"
+optional = false
+python-versions = "<4.0,>=3.8.1"
+files = [
+    {file = "langchain_groq-0.1.9-py3-none-any.whl", hash = "sha256:632ba94bc05de2217f0dfd37be5892faa49eca6afdfe577926447024a96eef80"},
+    {file = "langchain_groq-0.1.9.tar.gz", hash = "sha256:0f28a4df00e8d58b024fd83dc338795baf439769d582de5cced48951aa00bbce"},
+]
+
+[package.dependencies]
+groq = ">=0.4.1,<1"
+langchain-core = ">=0.2.26,<0.3.0"
 
 [[package]]
 name = "langchain-text-splitters"
@@ -3790,4 +3835,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.12,<3.13"
-content-hash = "dc999fcb9c5c14af97d3d88a43bbb9a21181fa34cb25e7345e05f87cabd306f1"
+content-hash = "b2226c5300c2bb23dc152f668abe04052d28b6aecfa8fdc16cea15da10768b87"
