@@ -47,6 +47,3 @@ vector_store = FAISS.from_documents(split_documents, embed_model)
 
 # Optionally, save the vector store for later use
 vector_store.save_local(INDEX_NAME)
-
-# You can load it back later with
-# vector_store = FAISS.load_local("faiss_vector_store", embedding_model)
