@@ -5,22 +5,26 @@ services:
       context: ./vector_db
       dockerfile: Dockerfile
     volumes:
-      - ./vector_db/data:/app/data
+      - ./data:/app/data
+      - ./hypnoq_index:/app/hypnoq_index
     ports:
       - "5000:5000"
+    environment:
+      - DATA_PATH=/app/data
+      - INDEX_NAME=/app/hypnoq_index
 
-  app:
-    build:
-      context: ./app
-      dockerfile: Dockerfile
-    ports:
-      - "8501:8501"
-    depends_on:
-      - vector_db
+  # app:
+  #   build:
+  #     context: ./app
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8501:8501"
+  #   depends_on:
+  #     - vector_db
 
-  models:
-    build:
-      context: ./models
-      dockerfile: Dockerfile
-    depends_on:
-      - vector_db
+  # models:
+  #   build:
+  #     context: ./models
+  #     dockerfile: Dockerfile
+  #   depends_on:
+  #     - vector_db

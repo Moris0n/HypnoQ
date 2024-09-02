@@ -1,9 +1,10 @@
 import os
+from uuid import uuid4
 
 from langchain.text_splitter import MarkdownHeaderTextSplitter
 from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
-from langchain.vectorstores import FAISS
-from langchain.document_loaders import DirectoryLoader
+from langchain_community.vectorstores import FAISS
+from langchain_community.document_loaders import DirectoryLoader
 from langchain_community.document_loaders import TextLoader
 
 # File paths and other configurations
@@ -31,13 +32,18 @@ splitter = MarkdownHeaderTextSplitter(headers_to_split_on=headers_to_split_on)
 split_documents = []
 for document in documents:
     split_texts = splitter.split_text(document.page_content)
-    for text_chunk in split_texts:
+    # add id to the metadata
+    uuids = [str(uuid4()) for _ in range(len(split_texts))]
+    for i, text_chunk in enumerate(split_texts):
         question = (text_chunk.metadata.get('Header 4', ''))
         answer = (text_chunk.page_content)
         text_chunk.page_content=f"{question}\n{answer}"
-        
+        text_chunk.metadata |= {'doc_id': uuids[i]}    
+
     split_documents+=split_texts
 
+print('----loaded docs ----')
+print(len(split_documents))
 
 # Initialize the embedding model (using OpenAI here, you can use others like HuggingFace)
 embed_model = FastEmbedEmbeddings(model_name="BAAI/bge-base-en-v1.5")
