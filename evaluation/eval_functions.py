@@ -1,4 +1,10 @@
 # functions to evaluate RAG
+from numpy import dot
+from numpy.linalg import norm
+
+def cosin_similarity(a, b):
+    cos_sim = dot(a, b)/(norm(a)*norm(b))
+    return cos_sim
 
 def hit_rate(relevance_total):
     cnt = 0
@@ -18,4 +24,7 @@ def mrr(relevance_total):
                 total_score = total_score + 1 / (rank + 1)
 
     return total_score / len(relevance_total)
+
+
+
 
