@@ -12,19 +12,29 @@ services:
     environment:
       - DATA_PATH=/app/data
       - INDEX_NAME=/app/hypnoq_index
+  
+  models:
+    build:
+      context: ./models
+      dockerfile: Dockerfile
+    env_file:
+    - .env
+    volumes:
+      - ./hypnoq_index:/app/hypnoq_index
+    ports:
+    - "8000:8000"
+    depends_on:
+      - vector_db
+    environment:
+      - INDEX_NAME=/app/hypnoq_index
+      
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+    depends_on:
+      - vector_db
 
-  # app:
-  #   build:
-  #     context: ./app
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8501:8501"
-  #   depends_on:
-  #     - vector_db
 
-  # models:
-  #   build:
-  #     context: ./models
-  #     dockerfile: Dockerfile
-  #   depends_on:
-  #     - vector_db

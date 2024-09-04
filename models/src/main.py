@@ -1,4 +1,4 @@
-from data_models.models import HypnoQueryInput, HypnoQueryOutput
+from data_models.models import HypnoQueryInput, HypnoQueryOutput, FeedbackInput, FeedbackOutput
 from chains.hypnoq_chain import qna_vector_chain
 from utils.async_utils import async_retry
 
@@ -26,4 +26,16 @@ async def get_status():
 async def query_hypno_rag(query: HypnoQueryInput) -> HypnoQueryOutput:
     query_response = await invoke_chain_with_retry(query.question)
 
-    return HypnoQueryOutput(input=query.question, output=query_response['result'])
+    output_text = query_response.get('result', 'No answer found')
+
+    return HypnoQueryOutput(input=query.question, output=output_text)
+
+@app.post("/feedback")
+async def provide_feedback(feedback: FeedbackInput) -> FeedbackOutput:
+    if feedback.helpful:
+        return FeedbackOutput(message="Thank you for your feedback!")
+    else:
+        return FeedbackOutput(
+            message="Sorry that the answer wasn't helpful. We'll review the question.",
+            original_question=feedback.question
+        )
