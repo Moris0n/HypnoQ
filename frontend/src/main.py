@@ -3,6 +3,7 @@ import requests
 import streamlit as st
 
 CHATBOT_URL = os.getenv("CHATBOT_URL", "http://models:8000/hypno-bot")
+print(f"CHATBOT_URL is set to: {CHATBOT_URL}")  # Debugging statement
 
 with st.sidebar:
     st.header("About")
@@ -35,20 +36,22 @@ for message in st.session_state.messages:
 
 if prompt := st.chat_input("What do you want to Ask?"):
     st.chat_message("user").markdown(prompt)
-
     st.session_state.messages.append({"role": "user", "output": prompt})
 
-    data = {"text": prompt}
+    data = {"question": prompt}
+    print(f"Sending data to {CHATBOT_URL}: {data}")  # Debugging statement
+
 
     with st.spinner("Searching for an answer..."):
-        response = requests.post(CHATBOT_URL, json=data)
+        response = requests.post(CHATBOT_URL, json=data)    
+        print(f"Response status code: {response.status_code}")  # Debugging statement
+        print(f"Response content: {response.content}")  # Debugging statement
 
         if response.status_code == 200:
-            output_text = response.json()["output"]
+            output_text = response.json().get("output", "No output key in response")
         else:
-            output_text = """An error occurred while processing your message.
-            Please try again or rephrase your message."""
-            explanation = output_text
+            output_text = f"An error occurred: {response.status_code}\n{response.content.decode()}"
+
 
     st.chat_message("assistant").markdown(output_text)
 

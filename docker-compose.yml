@@ -1,5 +1,15 @@
-version: '3.8'
 services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   vector_db:
     build:
       context: ./vector_db
@@ -37,4 +47,7 @@ services:
     depends_on:
       - vector_db
 
+# Define the volume at the bottom of the file
+volumes:
+  postgres_data:
 

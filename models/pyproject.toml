@@ -16,6 +16,7 @@ langchain-groq = "^0.1.9"
 python-dotenv = "^1.0.1"
 uvicorn = "^0.30.6"
 fastapi = {extras = ["standard"], version = "^0.112.2"}
+psycopg2-binary = "^2.9.9"
 
 
 [tool.poetry.group.dev.dependencies]
