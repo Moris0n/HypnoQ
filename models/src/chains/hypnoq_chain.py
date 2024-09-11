@@ -4,7 +4,8 @@ from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq 
 from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
 from langchain.vectorstores import FAISS
-from langchain.chains import RetrievalQA
+from operator import itemgetter
+from langchain.chains import RetrievalQA  
 from langchain.prompts import (
     PromptTemplate,
     SystemMessagePromptTemplate,
@@ -32,6 +33,8 @@ groq_llm = ChatGroq(
     max_retries=2
 )
 
+# Q&A Chain
+  
 qna_prompt = """Your task is to use the provided content to answer questions about hypnotherapy services offered by the hypnotherapist. 
 Use the following context to provide detailed and accurate information. 
 Do not create or assume information beyond what is given in the context. 
@@ -57,10 +60,44 @@ retriver = vector_store.as_retriever(search_type="similarity_score_threshold",
                                             search_kwargs={"score_threshold": .5, 
                                             "k": 5})
 
-qna_vector_chain = RetrievalQA.from_chain_type(
-    llm=groq_llm,
-    chain_type="stuff",
-    retriever=retriver,
+qna_vector_chain = (
+    {
+        "context": itemgetter("question") | retriver,
+        "question": itemgetter("question") 
+    }
+    | qna_template
+    | groq_llm
 )
 
-qna_vector_chain.combine_documents_chain.llm_chain.prompt = qna_template
+# Eval Chain
+
+llm_evaluate_prompt = """
+You are an expert evaluator for a Retrieval-Augmented Generation (RAG) system.
+Your task is to analyze the relevance of the generated answer to the given question.
+Based on the relevance, you will classify it as "NON_RELEVANT", "PARTLY_RELEVANT", or "RELEVANT".
+
+Here is the data for evaluation:
+
+Question: {question}
+Generated Answer: {llm_answer}
+
+Please analyze the content and context of the generated answer in relation to the question
+and provide your evaluation in parsable JSON without using code blocks:
+
+{{
+  "Relevance": "NON_RELEVANT" | "PARTLY_RELEVANT" | "RELEVANT",
+  "Explanation": "[Provide a brief explanation for your evaluation]"
+}}
+"""
+
+eval_system_prompt = SystemMessagePromptTemplate(
+    prompt=PromptTemplate(input_variables=["question","llm_answer"], template=llm_judge_prompt)
+)
+
+messages = [eval_system_prompt]
+
+eval_template = ChatPromptTemplate(
+    input_variables=[ "question","llm_answer"], messages=messages
+)
+
+eval_chain = eval_template | groq_llm 

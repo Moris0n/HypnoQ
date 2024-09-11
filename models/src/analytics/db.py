@@ -66,17 +66,19 @@ def save_conversation(conversation_id, question, answer_data, timestamp=None):
             cur.execute(
                 """
                 INSERT INTO conversations 
-                (id, question, answer, model_used, response_time, relevance, 
-                relevance_explanation, prompt_tokens, completion_tokens, total_tokens, 
-                eval_prompt_tokens, eval_completion_tokens, eval_total_tokens, openai_cost, timestamp)
+                (id, question, answer, model_name, qna_time, total_time
+                relevance, relevance_explanation, 
+                prompt_tokens, completion_tokens, total_tokens, 
+                eval_prompt_tokens, eval_completion_tokens, eval_total_tokens, timestamp)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """,
                 (
                     conversation_id,
                     question,
                     answer_data["answer"],
-                    answer_data["model_used"],
-                    answer_data["response_time"],
+                    answer_data["model_name"],
+                    answer_data["qna_time"],
+                    answer_data["total_time"],
                     answer_data["relevance"],
                     answer_data["relevance_explanation"],
                     answer_data["prompt_tokens"],
@@ -85,7 +87,6 @@ def save_conversation(conversation_id, question, answer_data, timestamp=None):
                     answer_data["eval_prompt_tokens"],
                     answer_data["eval_completion_tokens"],
                     answer_data["eval_total_tokens"],
-                    answer_data["openai_cost"],
                     timestamp
                 ),
             )
