@@ -1,11 +1,11 @@
 from time import time
 import json
 
-from chains.hypnoq_chain import qna_vector_chain, ev
+from chains.hypnoq_chain import qna_vector_chain, eval_chain
 
 def evaluate_relevance(question, answer):
     
-    response = eval_chain({"question" : question, "llm_answer" : answer})
+    response = eval_chain.invoke({"question" : question, "llm_answer" : answer})
 
     try:
         json_eval = json.loads(response.content)
@@ -18,7 +18,7 @@ def evaluate_relevance(question, answer):
 def rag(question):
     t0 = time()
 
-    response = qna_vector_chain({"question" : question})
+    response = qna_vector_chain.invoke({"question" : question})
     answer, data = response.content, response.response_metadata
 
     evaluation, rel_data = evaluate_relevance(question, answer)
@@ -28,11 +28,12 @@ def rag(question):
 
     answer_data = {
         'answer' : answer,
-        'model_name': data['model_name']
+        'model_name': data['model_name'],
         'qna_time': data['token_usage']['total_time'], 
+        'eval_time': rel_data['token_usage']['total_time'], 
         'total_time' : took,
         'relevance': evaluation.get("Relevance", "UNKNOWN"),
-        'relevance_explanation': relevance.get("Explanation", "Failed to parse evaluation"),
+        'relevance_explanation': evaluation.get("Explanation", "Failed to parse evaluation"),
         'completion_tokens': data['token_usage']['completion_tokens'],
         'prompt_tokens': data['token_usage']['prompt_tokens'],
         'total_tokens': data['token_usage']['total_tokens'],

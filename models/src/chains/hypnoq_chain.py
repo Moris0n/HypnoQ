@@ -91,7 +91,7 @@ and provide your evaluation in parsable JSON without using code blocks:
 """
 
 eval_system_prompt = SystemMessagePromptTemplate(
-    prompt=PromptTemplate(input_variables=["question","llm_answer"], template=llm_judge_prompt)
+    prompt=PromptTemplate(input_variables=["question","llm_answer"], template=llm_evaluate_prompt)
 )
 
 messages = [eval_system_prompt]

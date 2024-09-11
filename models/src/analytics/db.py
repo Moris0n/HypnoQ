@@ -3,6 +3,9 @@ import psycopg2
 from psycopg2.extras import DictCursor
 from datetime import datetime
 from zoneinfo import ZoneInfo
+from dotenv import load_dotenv
+
+load_dotenv()
 
 RUN_TIMEZONE_CHECK = os.getenv('RUN_TIMEZONE_CHECK', '1') == '1'
 
@@ -11,11 +14,12 @@ tz = ZoneInfo(TZ_INFO)
 
 def get_db_connection():
     return psycopg2.connect(
-        host=os.getenv("POSTGRES_HOST", "postgres"),
-        database=os.getenv("POSTGRES_DB", "course_assistant"),
-        user=os.getenv("POSTGRES_USER", "your_username"),
-        password=os.getenv("POSTGRES_PASSWORD", "your_password"),
+        host=os.getenv("POSTGRES_HOST", "localhost"),  
+        database=os.getenv("POSTGRES_DB", "hypno_analytics"),
+        user=os.getenv("POSTGRES_USER", "mor"),
+        password=os.getenv("POSTGRES_PASSWORD", "hypno_010203"),
     )
+
 
 def init_db():
     conn = get_db_connection()
@@ -29,7 +33,9 @@ def init_db():
                     id TEXT PRIMARY KEY,
                     question TEXT NOT NULL,
                     answer TEXT NOT NULL,
-                    model_used TEXT NOT NULL,
+                    model_name TEXT NOT NULL,
+                    qna_time FLOAT NOT NULL, 
+                    eval_time FLOAT NOT NULL,
                     response_time FLOAT NOT NULL,
                     relevance TEXT NOT NULL,
                     relevance_explanation TEXT NOT NULL,
@@ -39,7 +45,6 @@ def init_db():
                     eval_prompt_tokens INTEGER NOT NULL,
                     eval_completion_tokens INTEGER NOT NULL,
                     eval_total_tokens INTEGER NOT NULL,
-                    openai_cost FLOAT NOT NULL,
                     timestamp TIMESTAMP WITH TIME ZONE NOT NULL
                 )
             """)
@@ -66,7 +71,7 @@ def save_conversation(conversation_id, question, answer_data, timestamp=None):
             cur.execute(
                 """
                 INSERT INTO conversations 
-                (id, question, answer, model_name, qna_time, total_time
+                (id, question, answer, model_name, qna_time, eval_time, response_time,
                 relevance, relevance_explanation, 
                 prompt_tokens, completion_tokens, total_tokens, 
                 eval_prompt_tokens, eval_completion_tokens, eval_total_tokens, timestamp)
@@ -78,6 +83,7 @@ def save_conversation(conversation_id, question, answer_data, timestamp=None):
                     answer_data["answer"],
                     answer_data["model_name"],
                     answer_data["qna_time"],
+                    answer_data["eval_time"],
                     answer_data["total_time"],
                     answer_data["relevance"],
                     answer_data["relevance_explanation"],
