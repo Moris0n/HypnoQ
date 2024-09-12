@@ -14,10 +14,10 @@ tz = ZoneInfo(TZ_INFO)
 
 def get_db_connection():
     return psycopg2.connect(
-        host=os.getenv("POSTGRES_HOST", "localhost"),  
-        database=os.getenv("POSTGRES_DB", "hypno_analytics"),
-        user=os.getenv("POSTGRES_USER", "mor"),
-        password=os.getenv("POSTGRES_PASSWORD", "hypno_010203"),
+        host="localhost",  
+        database="hypno_analytics",
+        user="mor",
+        password="hypno_010203",
     )
 
 

@@ -7,6 +7,10 @@ from langchain_community.vectorstores import FAISS
 from langchain_community.document_loaders import DirectoryLoader
 from langchain_community.document_loaders import TextLoader
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # File paths and other configurations
 DATA_PATH =  os.getenv("DATA_PATH")
 INDEX_NAME = os.getenv("INDEX_NAME")
