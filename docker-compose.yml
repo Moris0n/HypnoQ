@@ -9,6 +9,10 @@ services:
       - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "mor", "-d", "hypno_analytics"]
+      interval: 10s
+      retries: 5
 
   vector_db:
     build:
@@ -34,7 +38,8 @@ services:
     ports:
     - "8000:8000"
     depends_on:
-      - vector_db
+      postgres:
+        condition: service_healthy
     environment:
       - INDEX_NAME=/app/hypnoq_index
       

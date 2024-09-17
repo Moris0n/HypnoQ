@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from analytics.db import init_db
+from db import init_db
 
 load_dotenv()
 

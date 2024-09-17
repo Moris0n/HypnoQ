@@ -3,7 +3,7 @@ import os
 from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq 
 from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
-from langchain.vectorstores import FAISS
+
 from operator import itemgetter
 from langchain.chains import RetrievalQA  
 from langchain.prompts import (

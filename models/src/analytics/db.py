@@ -14,10 +14,10 @@ tz = ZoneInfo(TZ_INFO)
 
 def get_db_connection():
     return psycopg2.connect(
-        host="localhost",  
-        database="hypno_analytics",
-        user="mor",
-        password="hypno_010203",
+    host=os.getenv("POSTGRES_HOST", "postgres"),
+    database=os.getenv("POSTGRES_DB", "hypno_analytics"),
+    user=os.getenv("POSTGRES_USER", "mor"),
+    password=os.getenv("POSTGRES_PASSWORD", "hypno_010203")
     )
 
 
@@ -172,14 +172,17 @@ def check_timezone():
             # Use py_time instead of tz for insertion
             cur.execute("""
                 INSERT INTO conversations 
-                (id, question, answer, model_used, response_time, relevance, 
-                relevance_explanation, prompt_tokens, completion_tokens, total_tokens, 
-                eval_prompt_tokens, eval_completion_tokens, eval_total_tokens, openai_cost, timestamp)
+                (id, question, answer, model_name, qna_time, eval_time, response_time,
+                relevance, relevance_explanation, 
+                prompt_tokens, completion_tokens, total_tokens, 
+                eval_prompt_tokens, eval_completion_tokens, eval_total_tokens, timestamp)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 RETURNING timestamp;
             """, 
-            ('test', 'test question', 'test answer', 'test model', 0.0, 0.0, 
-             'test explanation', 0, 0, 0, 0, 0, 0, 0.0, py_time))
+            ('test', 'test question', 'test answer', 'test model', 0.0, 0.0, 0.0,
+             'test relevant', 'test explanation',
+              0, 0, 0, 
+              0, 0, 0, py_time))
 
             inserted_time = cur.fetchone()[0]
             print(f"Inserted time (UTC): {inserted_time}")

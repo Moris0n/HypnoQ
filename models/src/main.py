@@ -16,7 +16,9 @@ async def invoke_chain_with_retry(query: str):
     to external APIs.
     """
     # Ensure the input is in the correct format
-    return await qna_vector_chain.ainvoke({"query": query})
+    print(f"Print query : {query}")
+    print(f"Print query quest: {query.question}")
+    return await qna_vector_chain.invoke({"question": query})
 
 @app.get("/")
 async def get_status():
