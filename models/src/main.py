@@ -1,6 +1,8 @@
 from data_models.models import HypnoQueryInput, HypnoQueryOutput, FeedbackInput, FeedbackOutput
-from chains.hypnoq_chain import qna_vector_chain
+from chains.rag import rag
+from analytics.db import save_conversation
 from utils.async_utils import async_retry
+import uuid
 
 from fastapi import FastAPI
 
@@ -16,9 +18,7 @@ async def invoke_chain_with_retry(query: str):
     to external APIs.
     """
     # Ensure the input is in the correct format
-    print(f"Print query : {query}")
-    print(f"Print query quest: {query.question}")
-    return await qna_vector_chain.invoke({"question": query})
+    return await rag(query)
 
 @app.get("/")
 async def get_status():
@@ -26,9 +26,19 @@ async def get_status():
 
 @app.post("/hypno-bot")
 async def query_hypno_rag(query: HypnoQueryInput) -> HypnoQueryOutput:
+
+    answer_data = await invoke_chain_with_retry(query.question)
+
+    conversation_id = str(uuid.uuid4())
+
+    db.save_conversation(
+        conversation_id=conversation_id,
+        question=question,
+        answer_data=answer_data,
+    )
     query_response = await invoke_chain_with_retry(query.question)
 
-    output_text = query_response.get('result', 'No answer found')
+    output_text = answer_data.get('answer', 'No answer found')
 
     return HypnoQueryOutput(input=query.question, output=output_text)
 
