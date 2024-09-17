@@ -50,7 +50,7 @@ services:
     ports:
       - "8501:8501"
     depends_on:
-      - vector_db
+      - models
 
 # Define the volume at the bottom of the file
 volumes:

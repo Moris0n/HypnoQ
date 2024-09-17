@@ -17,11 +17,13 @@ def evaluate_relevance(question, answer):
 
 def rag(question):
     t0 = time()
-
+    print('rag')
     response = qna_vector_chain.invoke({"question" : question})
     answer, data = response.content, response.response_metadata
-
+    print('rag response')
     evaluation, rel_data = evaluate_relevance(question, answer)
+    
+    print('rag eval')
 
     t1 = time()
     took = t1 - t0
