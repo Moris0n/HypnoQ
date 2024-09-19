@@ -166,10 +166,13 @@ def check_timezone():
             db_time_local = db_time_utc.astimezone(tz)
             print(f"Database current time ({TZ_INFO}): {db_time_local}")
 
-            py_time = datetime.now(tz)
+            py_time = datetime.now(tz)  # Python time with timezone
             print(f"Python current time: {py_time}")
 
-            # Use py_time instead of tz for insertion
+            # Prepare py_time as ISO format string if needed
+            py_time_iso = py_time.isoformat()
+
+            # Use py_time_iso for insertion
             cur.execute("""
                 INSERT INTO conversations 
                 (id, question, answer, model_name, qna_time, eval_time, response_time,
@@ -182,7 +185,7 @@ def check_timezone():
             ('test', 'test question', 'test answer', 'test model', 0.0, 0.0, 0.0,
              'test relevant', 'test explanation',
               0, 0, 0, 
-              0, 0, 0, py_time))
+              0, 0, 0, py_time_iso))
 
             inserted_time = cur.fetchone()[0]
             print(f"Inserted time (UTC): {inserted_time}")

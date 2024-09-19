@@ -18,6 +18,8 @@ services:
     build:
       context: ./vector_db
       dockerfile: Dockerfile
+    env_file:
+    - .env
     volumes:
       - ./data:/app/data
       - ./hypnoq_index:/app/hypnoq_index
@@ -37,11 +39,13 @@ services:
       - ./hypnoq_index:/app/hypnoq_index
     ports:
     - "8000:8000"
+    - "8888:8888" 
     depends_on:
       postgres:
         condition: service_healthy
     environment:
       - INDEX_NAME=/app/hypnoq_index
+    #command: ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
       
   frontend:
     build:
@@ -51,6 +55,8 @@ services:
       - "8501:8501"
     depends_on:
       - models
+    environment:
+      - CHATBOT_URL=http://models:8000/hypno-bot  
 
 # Define the volume at the bottom of the file
 volumes:

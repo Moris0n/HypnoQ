@@ -18,6 +18,9 @@ EMBEDDING_MODEL =  os.getenv("EMBEDDING_MODEL")
 LLM_MODEL = os.getenv("LLM_MODEL")
 INDEX_NAME = os.getenv("INDEX_NAME")
 
+print(f'embedding model : {EMBEDDING_MODEL}')
+print(f'llm model : {LLM_MODEL}')
+
 embed_model = FastEmbedEmbeddings(model_name=EMBEDDING_MODEL)
 
 vector_store = FAISS.load_local(

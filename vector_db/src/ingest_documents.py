@@ -49,8 +49,10 @@ for document in documents:
 print('----loaded docs ----')
 print(len(split_documents))
 
+
 # Initialize the embedding model (using OpenAI here, you can use others like HuggingFace)
 embed_model = FastEmbedEmbeddings(model_name=os.getenv("EMBEDDING_MODEL"))
+print(f'embedding with : {os.getenv("EMBEDDING_MODEL")}')
 
 # Create a FAISS vector store
 vector_store = FAISS.from_documents(split_documents, embed_model)
