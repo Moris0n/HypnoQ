@@ -18,9 +18,7 @@ async def invoke_chain_with_retry(query: str):
     This can help when there are intermittent connection issues
     to external APIs.
     """
-    print('invoke chain with retry delay 3')
     res = rag(query)  # No await here
-    print(res)
     return res  # Return without await
 
 @app.get("/")
@@ -29,7 +27,6 @@ async def get_status():
 
 @app.post("/hypno-bot")
 async def query_hypno_rag(query: HypnoQueryInput) -> HypnoQueryOutput:
-    print('hypno bot post')
     answer_data = await invoke_chain_with_retry(query.question)
 
     conversation_id = str(uuid.uuid4())
