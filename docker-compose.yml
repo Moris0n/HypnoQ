@@ -3,8 +3,6 @@ services:
     build:
       context: ./vector_db
       dockerfile: Dockerfile
-    env_file:
-    - .env
     volumes:
       - ./data:/app/data
       - ./hypnoq_index:/app/hypnoq_index
@@ -18,8 +16,6 @@ services:
     build:
       context: ./models
       dockerfile: Dockerfile
-    env_file:
-    - .env
     volumes:
       - ./hypnoq_index:/app/hypnoq_index
     ports:
