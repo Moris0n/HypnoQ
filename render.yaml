@@ -5,7 +5,8 @@ services:
     dockerfilePath: ./frontend/Dockerfile
     buildCommand: ""
     envVars:
-      CHATBOT_URL: "http://models:8000/hypno-bot"
+      - key: CHATBOT_URL
+        value: "http://models:8000/hypno-bot"
     autoDeploy: true
 
   - type: web
@@ -13,7 +14,8 @@ services:
     env: docker
     dockerfilePath: ./models/Dockerfile
     envVars:
-      INDEX_NAME: "/app/hypnoq_index"
+      - key: INDEX_NAME
+        value: "/app/hypnoq_index"
     autoDeploy: true
 
   - type: worker
@@ -21,8 +23,10 @@ services:
     env: docker
     dockerfilePath: ./vector_db/Dockerfile
     envVars:
-      DATA_PATH: "/app/data"
-      INDEX_NAME: "/app/hypnoq_index"
+      - key: DATA_PATH
+        value: "/app/data"
+      - key: INDEX_NAME
+        value: "/app/hypnoq_index"
     autoDeploy: true
 
   - type: web
@@ -31,6 +35,8 @@ services:
     ports:
       - 3000
     envVars:
-      GF_SECURITY_ADMIN_PASSWORD: "admin"
-      GF_SECURITY_ADMIN_USER: "admin"
+      - key: GF_SECURITY_ADMIN_PASSWORD
+        value: "admin"
+      - key: GF_SECURITY_ADMIN_USER
+        value: "admin"
     autoDeploy: true
