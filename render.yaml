@@ -28,15 +28,3 @@ services:
       - key: INDEX_NAME
         value: "/app/hypnoq_index"
     autoDeploy: true
-
-  - type: web
-    name: grafana
-    image: grafana/grafana:latest
-    ports:
-      - 3000
-    envVars:
-      - key: GF_SECURITY_ADMIN_PASSWORD
-        value: "admin"
-      - key: GF_SECURITY_ADMIN_USER
-        value: "admin"
-    autoDeploy: true
