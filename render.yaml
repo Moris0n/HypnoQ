@@ -37,7 +37,4 @@ databases:
     ipAllowList: # Optional, configure your IP if necessary
       - source: 0.0.0.0/0
         description: allow-all
-    envVars:
-    - key: DATABASE_URL
-      value: postgresql://mor:U8zYiRWc1LRqT201HhA4qluRdptHWT24@dpg-crp87dtds78s73d5s390-a/hypno_analytics
 
