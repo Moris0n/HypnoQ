@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: frontend
+    env: docker
+    dockerfilePath: ./frontend/Dockerfile
+    buildCommand: ""
+    envVars:
+      CHATBOT_URL: "http://models:8000/hypno-bot"
+    autoDeploy: true
+
+  - type: web
+    name: models
+    env: docker
+    dockerfilePath: ./models/Dockerfile
+    envVars:
+      INDEX_NAME: "/app/hypnoq_index"
+    autoDeploy: true
+
+  - type: worker
+    name: vector-db-worker
+    env: docker
+    dockerfilePath: ./vector_db/Dockerfile
+    envVars:
+      DATA_PATH: "/app/data"
+      INDEX_NAME: "/app/hypnoq_index"
+    autoDeploy: true
+
+  - type: web
+    name: grafana
+    image: grafana/grafana:latest
+    ports:
+      - 3000
+    envVars:
+      GF_SECURITY_ADMIN_PASSWORD: "admin"
+      GF_SECURITY_ADMIN_USER: "admin"
+    autoDeploy: true
