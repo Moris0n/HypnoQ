@@ -18,8 +18,8 @@ services:
         value: "/app/hypnoq_index"
     autoDeploy: true
 
-  - type: worker
-    name: vector-db-worker
+  - type: web
+    name: vector-db-web
     env: docker
     dockerfilePath: ./vector_db/Dockerfile
     envVars:
@@ -28,3 +28,16 @@ services:
       - key: INDEX_NAME
         value: "/app/hypnoq_index"
     autoDeploy: true
+
+# Add PostgreSQL Database
+databases:
+  - name: hypnoq-db
+    databaseName: hypno_qna_postgres
+    user: mor
+    ipAllowList: # Optional, configure your IP if necessary
+      - source: 0.0.0.0/0
+        description: allow-all
+    envVars:
+    - key: DATABASE_URL
+      value: postgresql://mor:U8zYiRWc1LRqT201HhA4qluRdptHWT24@dpg-crp87dtds78s73d5s390-a/hypno_analytics
+
