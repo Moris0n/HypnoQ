@@ -1,0 +1,3 @@
+FROM HypnoQ/docker-compose
+
+COPY . /app
