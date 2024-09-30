@@ -11,7 +11,6 @@ RUN apt-get update && apt-get install -y \
 
 COPY ./src/ /app
 COPY ./requirements.txt /app/requirements.txt
-COPY ../data /app/data
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r /app/requirements.txt
@@ -19,4 +18,5 @@ RUN pip install --no-cache-dir -r /app/requirements.txt
 # Ensure the entrypoint script is executable
 RUN chmod +x /app/entrypoint.sh
 
-CMD ["sh", "entrypoint.sh"]
+CMD ["sh", "/app/entrypoint.sh"]
+

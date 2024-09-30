@@ -14,10 +14,10 @@ tz = ZoneInfo(TZ_INFO)
 
 def get_db_connection():
     return psycopg2.connect(
-    host=os.getenv("POSTGRES_HOST", "postgres"),
-    database=os.getenv("POSTGRES_DB", "hypno_analytics"),
-    user=os.getenv("POSTGRES_USER", "mor"),
-    password=os.getenv("POSTGRES_PASSWORD", "hypno_010203")
+    host=os.getenv("POSTGRES_HOST"),
+    database=os.getenv("POSTGRES_DB"),
+    user=os.getenv("POSTGRES_USER"),
+    password=os.getenv("POSTGRES_PASSWORD")
     )
 
 
@@ -97,6 +97,10 @@ def save_conversation(conversation_id, question, answer_data, timestamp=None):
                 ),
             )
         conn.commit()
+        print("Conversation saved successfully: %s", conversation_id)
+    except Exception as e:
+        print("Error saving conversation %s: %s", conversation_id, str(e))
+        #raise  
     finally:
         conn.close()
 
@@ -113,6 +117,10 @@ def save_feedback(conversation_id, feedback, timestamp=None):
                 (conversation_id, feedback, timestamp),
             )
         conn.commit()
+        print("Feedback saved successfully for conversation: %s", conversation_id)
+    except Exception as e:
+        print("Error saving feedback for conversation %s: %s", conversation_id, str(e))
+        #raise 
     finally:
         conn.close()
 

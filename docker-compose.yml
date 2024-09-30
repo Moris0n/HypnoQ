@@ -25,7 +25,7 @@ services:
     ports:
     - "8000:8000"
     - "8888:8888" 
-    environment:
+    environment: 
       - INDEX_NAME=/app/hypnoq_index
       
   frontend:
@@ -37,6 +37,7 @@ services:
     depends_on:
       - models
     environment:
-      - CHATBOT_URL=http://models:8000/hypno-bot  
+      - CHATBOT_URL=https://hypnoq-models-894427071010.europe-west9.run.app/hypno-bot 
+      - FEEDBACK_URL=https://hypnoq-models-894427071010.europe-west9.run.app/feedback   
   
 

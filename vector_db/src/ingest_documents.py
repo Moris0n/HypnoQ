@@ -11,6 +11,18 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+import os
+
+# List files in the mounted directory
+mount_path = '/app/hypno'
+print(f"Contents of {mount_path}:")
+for root, dirs, files in os.walk(mount_path):
+    print(f"Root: {root}")
+    for dir_name in dirs:
+        print(f"Directory: {dir_name}")
+    for file_name in files:
+        print(f"File: {file_name}")
+
 # File paths and other configurations
 DATA_PATH =  os.getenv("DATA_PATH")
 INDEX_NAME = os.getenv("INDEX_NAME")
@@ -48,7 +60,6 @@ for document in documents:
 
 print('----loaded docs ----')
 print(len(split_documents))
-
 
 # Initialize the embedding model (using OpenAI here, you can use others like HuggingFace)
 embed_model = FastEmbedEmbeddings(model_name=os.getenv("EMBEDDING_MODEL"))

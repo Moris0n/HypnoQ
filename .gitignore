@@ -152,3 +152,5 @@ dmypy.json
 .pytype/
 
 hypnoq_index/
+data/postgres
+data/grafana

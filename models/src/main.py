@@ -5,10 +5,19 @@ from utils.async_utils import async_retry
 import uuid
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title="Hypno Q&A Chatbot",
     description="Endpoints for a hypnotherapy Q&A RAG chatbot",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 @async_retry(max_retries=10, delay=3)

@@ -8,7 +8,7 @@ services:
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./data/postgres:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "mor", "-d", "hypno_analytics"]
       interval: 10s
@@ -56,13 +56,14 @@ services:
       - models
     environment:
       - CHATBOT_URL=http://models:8000/hypno-bot  
+      - FEEDBACK_URL=http://models:8000/feedback
   
   grafana:
     image: grafana/grafana:latest
     ports:
       - "3000:3000"
     volumes:
-      - grafana_data:/var/lib/grafana
+      - ./data/grafana:/var/lib/grafana
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
       - GF_AUTH_DISABLE_LOGIN_FORM=false
@@ -76,9 +77,4 @@ services:
       - GF_SECURITY_SECRET_KEY=${GRAFANA_SECRET_KEY:-your_secret_key_here}
     depends_on:
       - postgres
-
-# Define the volume at the bottom of the file
-volumes:
-  postgres_data:
-  grafana_data:
 
