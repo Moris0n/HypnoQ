@@ -4,7 +4,9 @@
 
 The chatbot offers an anonymous, non-intimidating way for users to learn about cognitive hypnotherapy before deciding to engage with a human therapist.  
 
-The chatbot is designed to be integrated into a cognitive hypnotherapist’s website, offering accurate and specific responses that align with the unique aspects of cognitive hypnotherapy rather than general hypnotherapy, ensuring that users receive reliable, relevant information.  
+The chatbot is designed to be integrated into a cognitive hypnotherapist’s website, offering accurate and specific responses that align with the unique aspects of cognitive hypnotherapy rather than general hypnotherapy, ensuring that users receive reliable, relevant information. 
+
+![app preview](readme_img/qna_chatbot.png " app")
 
 ## Features
 
