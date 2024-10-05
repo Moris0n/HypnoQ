@@ -187,6 +187,90 @@ This deployed version allows you to try out Hypnoq without the need for local se
 - `docker-compose.override.yml`: Used for local development.
 - `docker-compose.yml`: Used for creating images for production deployment.
 
+## Monitoring
+
+Grafana is used for monitoring the application. 
+
+It's accessible at [localhost:3000](http://localhost:3000):
+
+- Login: "admin"
+- Password: "admin"
+
+### Dashboards
+
+The monitoring dashboard contains several panels:  
+
+![dashboard1](readme_img/grafana_01.png " dashboard1") 
+
+1. **Relevant Answer (Gauge Chart):** This chart visualizes the relevance of responses during conversations. It uses color-coded thresholds to represent different levels of response quality, allowing for a quick assessment of how relevant the answers are.
+
+2. **User Feedback (Pie Chart):** A pie chart displaying user feedback, breaking down the number of positive (thumbs up) and negative (thumbs down) responses. This panel provides insights into overall user satisfaction.
+
+3. **Recent Conversations (Table):** A table listing the five most recent questions, including details like the question, answer, relevance score, and timestamp. This panel helps track and review the latest user interactions.  
+
+![dashboard2](readme_img/grafana_02.png " dashboard2")
+
+1. **Response Time (Time Series):** A time series chart that tracks the response times of conversations over a given period. This panel is valuable for identifying performance bottlenecks and ensuring the system maintains quick response times.
+
+2. **Response Time Breakdown (Time Series):** This chart splits the overall response time into two components: the time taken by the LLM to generate an answer and the time it takes to evaluate the response. It displays a time series of each, providing deeper insights into system performance.  
+
+![dashboard3](readme_img/grafana_03.png " dashboard3")
+
+1. **Tokens Used (Time Series):** A time series chart that monitors the number of tokens consumed during conversations over time. This helps analyze usage patterns and the amount of data being processed.
+
+2. **Token Breakdown (Time Series):** This chart separates token usage into two categories: prompt tokens and completion tokens. It provides a time series view of each, offering insights into how tokens are distributed between input and output during conversations.  
+
+3. **Evaluation Tokens (Time Series):** A time series chart tracking the number of tokens used during the evaluation phase of conversations over time. This helps in understanding the token consumption related to the model's evaluation process.
+
+4. **Evaluation Token Breakdown (Time Series):** This chart separates evaluation token usage into two parts: tokens used for the prompt during evaluation and tokens generated for the completion. It provides a time series view of each, allowing for detailed analysis of token distribution during the evaluation phase.
+
+5. **Total Tokens (Time Series):** A time series chart showing the total number of tokens used across all conversations over time, providing an overview of token consumption.
+
+6. **Total Token Breakdown (Time Series):** This chart splits the total tokens into prompt and completion tokens, offering a quick comparison of their usage over time.
+Here’s how you can explain the manual setup process in your README file:
+
+### Manual Setup for Grafana and Postgres
+
+#### 1. Add the Postgres Datasource to Grafana
+1. Open your Grafana instance in a web browser (default: `http://localhost:3000`).
+2. Log in with the default credentials (Username: `admin`, Password: `admin`, unless you’ve changed it).
+3. Navigate to **Configuration** > **Data Sources** from the left-hand menu.
+4. Click **Add data source**, select **PostgreSQL**.
+5. Fill in the following fields:
+   - **Host**: `postgres:5432` or just `postgres`
+   - **Database**: `hypno_analytics`
+   - **User**: `mor` or your username (in case you changed it)
+   - **Password**: Use the Postgres password defined in your environment variables or Docker Compose file.
+   - Leave the other settings as default (e.g., SSL mode: `disable`).
+6. Click **Save & Test** to verify the connection.
+
+#### 2. Run the `generate_data.py` Script in the Postgres Docker Container
+This step generates the analytics data required by your Grafana dashboard.
+
+1. Open a terminal and run the following command to access the Postgres Docker container:
+   ```bash
+   docker-compose exec postgres bash
+   ```
+2. Once inside the container, navigate to the directory containing the script:
+   ```bash
+   cd /path/to/models/src/analytics
+   ```
+   (Make sure this path is correctly mapped in your Docker setup.)
+3. Run the script:
+   ```bash
+   python generate_data.py
+   ```
+   This script will populate the Postgres database with the required analytics data.
+
+#### 3. Load the Dashboard into Grafana
+1. In Grafana, navigate to **Dashboards** > **Manage** from the left-hand menu.
+2. Click **Import**.
+3. Click **Upload JSON file** and select the file `grafana/provisioning/dashboards/ChatBot Dashboard-1727707805906.json`.
+4. Choose the appropriate data source (your Postgres datasource) when prompted.
+5. Click **Import** to load the dashboard.
+
+Your Grafana dashboard should now be ready to display data.
+
 ## License
 
 This project is licensed under the MIT License. See the `LICENSE` file for more details.
