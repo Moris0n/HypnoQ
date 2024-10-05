@@ -24,8 +24,8 @@ The chatbot is designed to be integrated into a cognitive hypnotherapist’s web
 3. Store: FAISS VectorStore and Embeddings model were used to index and store the splits.
 
 ![rag retrieval](readme_img/retrieve.jpg " retrieval")
-**Retrieval and generation** 
-4. Retrieve: Given a potential client question, relevant splits are retrieved from storage using a Retriever.
+**Retrieval and generation**  
+4. Retrieve: Given a potential client question, relevant splits are retrieved from storage using a Retriever.  
 5. Generate: Groq with mixtral-8x7b-32768 produces an answer using a prompt that includes the question and the retrieved data
 
 ### Dataset
